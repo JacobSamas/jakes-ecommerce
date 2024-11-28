@@ -5,6 +5,7 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addItem } from '../redux/slices/cartSlice';
+import Link from 'next/link';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -70,7 +71,11 @@ export default function FeaturedProducts() {
         {showLeftArrow && (
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 bg-darkBlack text-teal p-3 rounded-full shadow-lg hover:bg-teal hover:text-darkBlack transition z-10 hidden md:block"
+            className={`absolute left-0 top-1/2 p-3 rounded-full shadow-lg z-10 hidden md:block ${
+              showLeftArrow
+                ? 'bg-darkBlack text-teal hover:bg-teal hover:text-darkBlack transition'
+                : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+            }`}
           >
             <AiOutlineLeft size={24} />
           </button>
@@ -81,39 +86,53 @@ export default function FeaturedProducts() {
           ref={scrollRef}
           className="flex overflow-x-scroll scroll-smooth no-scrollbar space-x-4"
         >
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="min-w-[250px] w-[250px] flex-shrink-0 bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="relative h-40 w-full">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  layout="fill"
-                  objectFit="cover"
-                  className="hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-bold text-darkBlack">{product.name}</h3>
-                <p className="text-teal font-bold mt-2">${product.price.toFixed(2)}</p>
+          {products.length > 0 ? (
+            products.map((product) => (
+              <div
+                key={product.id}
+                className="min-w-[250px] w-[250px] flex-shrink-0 bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+              >
+                <Link href={`/product/${product.id}`}>
+                  <div>
+                    <div className="relative h-40 w-full">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        layout="fill"
+                        objectFit="cover"
+                        className="hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="p-4 text-center">
+                      <h3 className="text-lg font-bold text-darkBlack">{product.name}</h3>
+                      <p className="text-teal font-bold mt-2">${product.price.toFixed(2)}</p>
+                    </div>
+                  </div>
+                </Link>
                 <button
-                  className="mt-4 px-4 py-2 bg-teal text-white font-bold rounded-md hover:bg-green transition"
+                  className="mt-4 px-4 py-2 bg-teal text-white font-bold rounded-md hover:bg-green transition w-full"
                   onClick={() => handleAddToCart(product)}
                 >
                   Add to Cart
                 </button>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center text-lightGray text-xl">
+              No products available at the moment.
+            </p>
+          )}
         </div>
 
         {/* Right Arrow */}
         {showRightArrow && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 bg-darkBlack text-teal p-3 rounded-full shadow-lg hover:bg-teal hover:text-darkBlack transition z-10 hidden md:block"
+            className={`absolute right-0 top-1/2 p-3 rounded-full shadow-lg z-10 hidden md:block ${
+              showRightArrow
+                ? 'bg-darkBlack text-teal hover:bg-teal hover:text-darkBlack transition'
+                : 'bg-gray-700 text-gray-400 cursor-not-allowed'
+            }`}
           >
             <AiOutlineRight size={24} />
           </button>
