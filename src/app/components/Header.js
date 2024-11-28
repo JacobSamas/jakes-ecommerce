@@ -2,22 +2,46 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { AiOutlineMenu, AiOutlineClose, AiOutlineShoppingCart, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineShoppingCart, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai';
+import MobileOverlay from './MobileOverlay';
+import { useSelector } from 'react-redux';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   return (
     <header className="bg-darkBlack text-lightGray shadow-md sticky top-0 z-50">
-      {/* Header Top Bar */}
-      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+      <div className="container mx-auto px-6 py-4 flex flex-wrap lg:flex-nowrap justify-between items-center">
         {/* Logo */}
-        <div className="text-teal text-2xl font-bold">
-          <Link href="/">Jake&apos;s Shop</Link>
+        <div className="flex items-center justify-between w-full lg:w-auto">
+          <div className="text-teal text-2xl font-bold">
+            <Link href="/">Jake&apos;s Shop</Link>
+          </div>
+          {/* Cart, User, and Hamburger Menu (Mobile/Tablet) */}
+          <div className="flex items-center space-x-4 lg:hidden">
+            <Link href="/cart" className="relative hover:text-teal transition">
+              <AiOutlineShoppingCart size={24} />
+              {totalQuantity > 0 && (
+                <span className="absolute -top-2 -right-2 bg-teal text-darkBlack text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                  {totalQuantity}
+                </span>
+              )}
+            </Link>
+            <Link href="/profile" className="hover:text-teal transition">
+              <AiOutlineUser size={24} />
+            </Link>
+            <button
+              className="text-teal text-2xl"
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <AiOutlineMenu />
+            </button>
+          </div>
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden lg:flex space-x-6">
           <Link href="/" className="hover:text-teal transition">
             Home
           </Link>
@@ -32,87 +56,36 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* Icons */}
-        <div className="hidden lg:flex items-center space-x-4">
-          <div className="bg-lightGray text-darkBlack rounded-md px-4 py-2 flex items-center">
+        {/* Search Bar and Icons (Desktop) */}
+        <div className="flex flex-wrap lg:flex-nowrap w-full lg:w-auto items-center lg:space-x-4 space-y-4 lg:space-y-0">
+          {/* Search Bar */}
+          <div className="flex items-center bg-lightGray text-darkBlack rounded-md px-4 py-2 w-full lg:w-auto">
             <input
               type="text"
               placeholder="Search products..."
-              className="bg-transparent outline-none flex-grow"
+              className="bg-transparent outline-none flex-grow text-sm lg:text-base"
             />
             <AiOutlineSearch className="text-teal" size={20} />
           </div>
-          <Link href="/cart" className="relative hover:text-teal transition">
-            <AiOutlineShoppingCart size={24} />
-            <span className="absolute -top-2 -right-2 bg-teal text-darkBlack text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
-              3
-            </span>
-          </Link>
-          <Link href="/profile" className="hover:text-teal transition">
-            <AiOutlineUser size={24} />
-          </Link>
-        </div>
-
-        {/* Hamburger Menu Button */}
-        <button
-          className="md:hidden text-teal text-2xl"
-          onClick={() => setIsMenuOpen(true)}
-        >
-          <AiOutlineMenu />
-        </button>
-      </div>
-
-      {/* Hamburger Menu Full-Screen Overlay */}
-      <div
-        className={`fixed inset-0 bg-darkBlack bg-opacity-95 text-lightGray z-50 flex flex-col items-center justify-center transition-transform duration-300 ${
-          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        {/* Close Button */}
-        <button
-          className="absolute top-5 right-5 text-teal text-2xl"
-          onClick={() => setIsMenuOpen(false)}
-        >
-          <AiOutlineClose />
-        </button>
-
-        {/* Fully Stacked Content */}
-        <div className="flex flex-col items-center space-y-6 text-center">
-          {/* Navigation Links */}
-          <Link href="/" onClick={() => setIsMenuOpen(false)} className="text-2xl hover:text-teal transition">
-            Home
-          </Link>
-          <Link href="/shop" onClick={() => setIsMenuOpen(false)} className="text-2xl hover:text-teal transition">
-            Shop
-          </Link>
-          <Link href="/about" onClick={() => setIsMenuOpen(false)} className="text-2xl hover:text-teal transition">
-            About
-          </Link>
-          <Link href="/contact" onClick={() => setIsMenuOpen(false)} className="text-2xl hover:text-teal transition">
-            Contact
-          </Link>
-
-          {/* Search Bar */}
-          <div className="bg-lightGray text-darkBlack rounded-md px-4 py-3 flex items-center w-10/12 max-w-md">
-            <input
-              type="text"
-              placeholder="Search products..."
-              className="bg-transparent outline-none flex-grow"
-            />
-            <AiOutlineSearch className="text-teal" size={24} />
-          </div>
-
-          {/* Icons */}
-          <div className="flex items-center space-x-6">
-            <Link href="/cart" onClick={() => setIsMenuOpen(false)} className="hover:text-teal transition">
-              <AiOutlineShoppingCart size={30} />
+          {/* Cart and Profile Icons (Desktop) */}
+          <div className="hidden lg:flex items-center space-x-4 lg:ml-4">
+            <Link href="/cart" className="relative hover:text-teal transition">
+              <AiOutlineShoppingCart size={24} />
+              {totalQuantity > 0 && (
+                <span className="absolute -top-2 -right-2 bg-teal text-darkBlack text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                  {totalQuantity}
+                </span>
+              )}
             </Link>
-            <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="hover:text-teal transition">
-              <AiOutlineUser size={30} />
+            <Link href="/profile" className="hover:text-teal transition">
+              <AiOutlineUser size={24} />
             </Link>
           </div>
         </div>
       </div>
+
+      {/* Mobile Overlay */}
+      {isMenuOpen && <MobileOverlay closeMenu={() => setIsMenuOpen(false)} />}
     </header>
   );
 }
