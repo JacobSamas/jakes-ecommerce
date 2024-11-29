@@ -4,11 +4,20 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { AiOutlineMenu, AiOutlineShoppingCart, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai';
 import MobileOverlay from './MobileOverlay';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
+import { toast } from 'react-toastify';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success('Logged out successfully!', { theme: 'dark' });
+  };
 
   return (
     <header className="bg-darkBlack text-lightGray shadow-md sticky top-0 z-50">
@@ -28,7 +37,7 @@ export default function Header() {
                 </span>
               )}
             </Link>
-            <Link href="/profile" className="hover:text-teal transition">
+            <Link href={isAuthenticated ? '/profile' : '/auth/login'} className="hover:text-teal transition">
               <AiOutlineUser size={24} />
             </Link>
             <button
@@ -42,9 +51,6 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden lg:flex space-x-6">
-          <Link href="/" className="hover:text-teal transition">
-            Home
-          </Link>
           <Link href="/shop" className="hover:text-teal transition">
             Shop
           </Link>
@@ -54,6 +60,18 @@ export default function Header() {
           <Link href="/contact" className="hover:text-teal transition">
             Contact
           </Link>
+          {isAuthenticated ? (
+            <button
+              className="hover:text-teal transition"
+              onClick={handleLogout}
+            >
+              Log Out
+            </button>
+          ) : (
+            <Link href="/auth/login" className="hover:text-teal transition">
+              Log In
+            </Link>
+          )}
         </nav>
 
         {/* Search Bar and Icons (Desktop) */}
@@ -77,7 +95,7 @@ export default function Header() {
                 </span>
               )}
             </Link>
-            <Link href="/profile" className="hover:text-teal transition">
+            <Link href={isAuthenticated ? '/profile' : '/auth/login'} className="hover:text-teal transition">
               <AiOutlineUser size={24} />
             </Link>
           </div>

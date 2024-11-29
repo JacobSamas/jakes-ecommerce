@@ -2,8 +2,20 @@
 
 import Link from 'next/link';
 import { AiOutlineClose } from 'react-icons/ai';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
+import { toast } from 'react-toastify';
 
 export default function MobileOverlay({ closeMenu }) {
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success('Logged out successfully!', { theme: 'dark' });
+    closeMenu(); // Close menu after logout
+  };
+
   return (
     <div
       className="fixed inset-0 flex justify-end z-50"
@@ -43,6 +55,26 @@ export default function MobileOverlay({ closeMenu }) {
             Contact
           </Link>
         </nav>
+
+        {/* Login/Logout */}
+        <div className="mt-auto">
+          {isAuthenticated ? (
+            <button
+              onClick={handleLogout}
+              className="w-full text-center text-teal font-bold py-2 hover:underline transition"
+            >
+              Log Out
+            </button>
+          ) : (
+            <Link
+              href="/auth/login"
+              onClick={closeMenu}
+              className="block text-center text-teal font-bold py-2 hover:underline transition"
+            >
+              Log In
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );
