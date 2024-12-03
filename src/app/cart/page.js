@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { useSelector, useDispatch } from 'react-redux';
-import { AiOutlinePlus, AiOutlineMinus, AiOutlineDelete } from 'react-icons/ai';
-import { addItem, removeItem } from '../redux/slices/cartSlice';
-import Image from 'next/image';
+import { useSelector, useDispatch } from "react-redux";
+import { AiOutlinePlus, AiOutlineMinus, AiOutlineDelete } from "react-icons/ai";
+import { addItem, removeItem } from "../redux/slices/cartSlice";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function CartPage() {
   const cartItems = useSelector((state) => state.cart.items);
@@ -17,7 +18,9 @@ export default function CartPage() {
 
       {/* Check if the cart is empty */}
       {cartItems.length === 0 ? (
-        <p className="text-lightGray text-center text-lg">Your cart is empty.</p>
+        <p className="text-lightGray text-center text-lg">
+          Your cart is empty.
+        </p>
       ) : (
         <div className="flex flex-col lg:flex-row justify-between gap-8">
           {/* Cart Items */}
@@ -81,11 +84,14 @@ export default function CartPage() {
               Total Items: <span className="font-bold">{totalQuantity}</span>
             </p>
             <p className="text-lg mb-4">
-              Total Price: <span className="font-bold">${totalPrice.toFixed(2)}</span>
+              Total Price:{" "}
+              <span className="font-bold">${totalPrice.toFixed(2)}</span>
             </p>
-            <button className="w-full bg-teal text-darkBlack font-bold px-4 py-2 rounded-md hover:bg-green transition">
-              Proceed to Checkout
-            </button>
+            <Link href="/checkout">
+              <button className="w-full bg-teal text-darkBlack font-bold px-4 py-2 rounded-md hover:bg-green transition">
+                Proceed to Checkout
+              </button>
+            </Link>
           </div>
         </div>
       )}
