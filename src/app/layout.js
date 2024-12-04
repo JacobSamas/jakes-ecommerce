@@ -4,11 +4,16 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import { usePathname } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
+import "./globals.css";
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname(); 
+
+  const excludePaths = ["/auth/login", "/auth/signup"];
+
   return (
     <html lang="en">
       <body className="bg-darkBlack text-lightGray">
@@ -20,9 +25,9 @@ export default function RootLayout({ children }) {
           pauseOnHover
         />
         <Provider store={store}>
-          <Header />
+          {!excludePaths.includes(pathname) && <Header />}
           <main>{children}</main>
-          <Footer />
+          {!excludePaths.includes(pathname) && <Footer />}
         </Provider>
       </body>
     </html>

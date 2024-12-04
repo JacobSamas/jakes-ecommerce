@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/slices/authSlice';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 export default function LoginPage() {
@@ -13,6 +14,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const dispatch = useDispatch();
+  const router = useRouter(); // Initialize useRouter
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -27,6 +29,9 @@ export default function LoginPage() {
     dispatch(login(user));
 
     toast.success('Login successful!', { theme: 'dark' });
+
+    // Redirect to Home Page
+    router.push('/');
   };
 
   return (

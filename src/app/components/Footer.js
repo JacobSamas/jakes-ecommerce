@@ -1,7 +1,7 @@
 'use client';
 
-import { AiFillFacebook, AiFillInstagram } from 'react-icons/ai'; // Removed AiFillTwitter
-import { FaTwitter } from 'react-icons/fa'; // Added FaTwitter as an alternative
+import { AiFillFacebook, AiFillInstagram } from 'react-icons/ai'; 
+import { FaTwitter } from 'react-icons/fa'; 
 
 export default function Footer() {
   return (
