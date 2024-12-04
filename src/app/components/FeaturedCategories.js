@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { useRef, useState, useEffect } from 'react';
+import Link from "next/link";
 
 const categories = [
   { id: 1, name: 'Electronics', image: 'https://via.placeholder.com/400x300?text=Electronics' },
@@ -68,23 +69,24 @@ export default function FeaturedCategories() {
           className="flex overflow-x-scroll scroll-smooth no-scrollbar space-x-4"
         >
           {categories.map((category) => (
-            <div
-              key={category.id}
-              className="min-w-[250px] w-[250px] flex-shrink-0 bg-lightGray rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="relative h-40 w-full">
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  layout="fill"
-                  objectFit="cover"
-                  className="hover:scale-105 transition-transform duration-500"
-                />
+            <Link key={category.id} href={`/categories/${category.name.toLowerCase()}`}>
+              <div
+                className="min-w-[250px] w-[250px] flex-shrink-0 bg-lightGray rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+              >
+                <div className="relative h-40 w-full">
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <h3 className="text-lg font-bold text-darkBlack">{category.name}</h3>
+                </div>
               </div>
-              <div className="p-4 text-center">
-                <h3 className="text-lg font-bold text-darkBlack">{category.name}</h3>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -92,7 +94,7 @@ export default function FeaturedCategories() {
         {showRightArrow && (
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2  bg-darkBlack text-teal p-3 rounded-full shadow-lg hover:bg-teal hover:text-darkBlack transition z-10 hidden md:block"
+            className="absolute right-0 top-1/2 bg-darkBlack text-teal p-3 rounded-full shadow-lg hover:bg-teal hover:text-darkBlack transition z-10 hidden md:block"
           >
             <AiOutlineRight size={24} />
           </button>
