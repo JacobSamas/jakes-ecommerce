@@ -1,24 +1,26 @@
-'use client';
+"use client";
 
-import { useSelector } from 'react-redux';
-import { useState } from 'react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useSelector } from "react-redux";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
   const cartItems = useSelector((state) => state.cart.items);
   const totalPrice = useSelector((state) => state.cart.totalPrice);
+  const router = useRouter();
   const [shippingDetails, setShippingDetails] = useState({
-    name: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
   });
   const [paymentDetails, setPaymentDetails] = useState({
-    cardNumber: '',
-    expiry: '',
-    cvv: '',
+    cardNumber: "",
+    expiry: "",
+    cvv: "",
   });
 
   const handlePlaceOrder = (e) => {
@@ -34,26 +36,26 @@ export default function CheckoutPage() {
       !paymentDetails.expiry ||
       !paymentDetails.cvv
     ) {
-      toast.error('Please fill out all required fields.', { theme: 'dark' });
+      toast.error("Please fill out all required fields.", { theme: "dark" });
       return;
     }
 
-    // Simulate order placement
-    toast.success('Order placed successfully!', { theme: 'dark' });
+    toast.success("Order placed successfully!", { theme: "dark" });
 
-    // Clear form fields (optional, based on your flow)
     setShippingDetails({
-      name: '',
-      address: '',
-      city: '',
-      state: '',
-      zip: '',
+      name: "",
+      address: "",
+      city: "",
+      state: "",
+      zip: "",
     });
     setPaymentDetails({
-      cardNumber: '',
-      expiry: '',
-      cvv: '',
+      cardNumber: "",
+      expiry: "",
+      cvv: "",
     });
+
+    router.push("/order-confirmation");
   };
 
   return (
@@ -74,7 +76,9 @@ export default function CheckoutPage() {
                   <p className="font-bold">{item.name}</p>
                   <p className="text-sm">Quantity: {item.quantity}</p>
                 </div>
-                <p className="font-bold">${(item.price * item.quantity).toFixed(2)}</p>
+                <p className="font-bold">
+                  ${(item.price * item.quantity).toFixed(2)}
+                </p>
               </li>
             ))}
           </ul>
@@ -96,7 +100,10 @@ export default function CheckoutPage() {
                 type="text"
                 value={shippingDetails.name}
                 onChange={(e) =>
-                  setShippingDetails({ ...shippingDetails, name: e.target.value })
+                  setShippingDetails({
+                    ...shippingDetails,
+                    name: e.target.value,
+                  })
                 }
                 className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                 required
@@ -111,7 +118,10 @@ export default function CheckoutPage() {
                 type="text"
                 value={shippingDetails.address}
                 onChange={(e) =>
-                  setShippingDetails({ ...shippingDetails, address: e.target.value })
+                  setShippingDetails({
+                    ...shippingDetails,
+                    address: e.target.value,
+                  })
                 }
                 className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                 required
@@ -127,7 +137,10 @@ export default function CheckoutPage() {
                   type="text"
                   value={shippingDetails.city}
                   onChange={(e) =>
-                    setShippingDetails({ ...shippingDetails, city: e.target.value })
+                    setShippingDetails({
+                      ...shippingDetails,
+                      city: e.target.value,
+                    })
                   }
                   className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                   required
@@ -142,7 +155,10 @@ export default function CheckoutPage() {
                   type="text"
                   value={shippingDetails.state}
                   onChange={(e) =>
-                    setShippingDetails({ ...shippingDetails, state: e.target.value })
+                    setShippingDetails({
+                      ...shippingDetails,
+                      state: e.target.value,
+                    })
                   }
                   className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                   required
@@ -158,7 +174,10 @@ export default function CheckoutPage() {
                 type="text"
                 value={shippingDetails.zip}
                 onChange={(e) =>
-                  setShippingDetails({ ...shippingDetails, zip: e.target.value })
+                  setShippingDetails({
+                    ...shippingDetails,
+                    zip: e.target.value,
+                  })
                 }
                 className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                 required
@@ -175,7 +194,10 @@ export default function CheckoutPage() {
                 type="text"
                 value={paymentDetails.cardNumber}
                 onChange={(e) =>
-                  setPaymentDetails({ ...paymentDetails, cardNumber: e.target.value })
+                  setPaymentDetails({
+                    ...paymentDetails,
+                    cardNumber: e.target.value,
+                  })
                 }
                 className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                 required
@@ -191,7 +213,10 @@ export default function CheckoutPage() {
                   type="text"
                   value={paymentDetails.expiry}
                   onChange={(e) =>
-                    setPaymentDetails({ ...paymentDetails, expiry: e.target.value })
+                    setPaymentDetails({
+                      ...paymentDetails,
+                      expiry: e.target.value,
+                    })
                   }
                   className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                   required
@@ -206,7 +231,10 @@ export default function CheckoutPage() {
                   type="text"
                   value={paymentDetails.cvv}
                   onChange={(e) =>
-                    setPaymentDetails({ ...paymentDetails, cvv: e.target.value })
+                    setPaymentDetails({
+                      ...paymentDetails,
+                      cvv: e.target.value,
+                    })
                   }
                   className="w-full px-4 py-2 rounded-md text-darkBlack focus:ring focus:ring-teal"
                   required
