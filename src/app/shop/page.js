@@ -8,15 +8,27 @@ import { useDispatch } from 'react-redux';
 import { addItem } from '../redux/slices/cartSlice';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
 export default function ShopPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('');
+  const [wishlist, setWishlist] = useState([]);
   const dispatch = useDispatch();
 
   const handleAddToCart = (product) => {
     dispatch(addItem(product));
     toast.success(`${product.name} added to cart!`, { theme: 'dark' });
+  };
+
+  const handleToggleWishlist = (product) => {
+    if (wishlist.some((item) => item.id === product.id)) {
+      setWishlist(wishlist.filter((item) => item.id !== product.id));
+      toast.info(`${product.name} removed from wishlist.`, { theme: 'dark' });
+    } else {
+      setWishlist([...wishlist, product]);
+      toast.success(`${product.name} added to wishlist!`, { theme: 'dark' });
+    }
   };
 
   const filteredProducts = products
@@ -58,7 +70,7 @@ export default function ShopPage() {
         {filteredProducts.map((product) => (
           <div
             key={product.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
+            className="bg-white rounded-lg shadow-md overflow-hidden relative"
           >
             <Link href={`/product/${product.id}`}>
               <div>
@@ -75,6 +87,17 @@ export default function ShopPage() {
                 </div>
               </div>
             </Link>
+            {/* Heart Icon */}
+            <button
+              onClick={() => handleToggleWishlist(product)}
+              className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md hover:bg-teal hover:text-white transition"
+            >
+              {wishlist.some((item) => item.id === product.id) ? (
+                <AiFillHeart className="text-teal" size={20} />
+              ) : (
+                <AiOutlineHeart className="text-gray-400" size={20} />
+              )}
+            </button>
             <button
               className="w-full bg-teal text-white font-bold py-2 rounded-b-md hover:bg-green transition"
               onClick={() => handleAddToCart(product)}

@@ -1,8 +1,13 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { AiOutlinePlus, AiOutlineMinus, AiOutlineDelete } from "react-icons/ai";
-import { addItem, removeItem } from "../redux/slices/cartSlice";
+import {
+  AiOutlinePlus,
+  AiOutlineMinus,
+  AiOutlineDelete,
+  AiOutlineHeart,
+} from "react-icons/ai";
+import { addItem, removeItem, clearItem } from "../redux/slices/cartSlice";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -28,17 +33,19 @@ export default function CartPage() {
             {cartItems.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between bg-darkBlack text-lightGray rounded-lg shadow-md p-4 mb-4"
+                className="relative flex items-center justify-between bg-darkBlack text-lightGray rounded-lg shadow-md p-4 mb-4"
               >
-                <div className="flex items-center gap-4">
+                <div className="relative flex items-center gap-4">
                   {/* Product Image */}
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    width={64}
-                    height={64}
-                    className="rounded-md object-cover"
-                  />
+                  <div className="relative">
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={64}
+                      height={64}
+                      className="rounded-md object-cover"
+                    />
+                  </div>
                   {/* Product Info */}
                   <div>
                     <h2 className="text-lg font-bold">{item.name}</h2>
@@ -68,7 +75,7 @@ export default function CartPage() {
                   </span>
                   <button
                     className="text-red-500 hover:text-red-700 transition"
-                    onClick={() => dispatch(removeItem(item.id, true))}
+                    onClick={() => dispatch(clearItem(item.id))}
                   >
                     <AiOutlineDelete size={20} />
                   </button>

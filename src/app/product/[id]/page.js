@@ -8,18 +8,18 @@ import { products } from '../../dummydata/dummyData';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { AiOutlineLeft, AiOutlineRight, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
 export default function ProductDetailsPage() {
   const { id } = useParams(); // Get dynamic route parameter
   const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
+  const [wishlist, setWishlist] = useState([]); // Wishlist state
   const scrollRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
 
   useEffect(() => {
-    // Simulate fetching the product based on ID
     const selectedProduct = products.find((item) => item.id.toString() === id);
     setProduct(selectedProduct);
   }, [id]);
@@ -36,6 +36,16 @@ export default function ProductDetailsPage() {
       progress: undefined,
       theme: 'dark',
     });
+  };
+
+  const handleToggleWishlist = (product) => {
+    if (wishlist.some((item) => item.id === product.id)) {
+      setWishlist(wishlist.filter((item) => item.id !== product.id));
+      toast.info(`${product.name} removed from wishlist.`, { theme: 'dark' });
+    } else {
+      setWishlist([...wishlist, product]);
+      toast.success(`${product.name} added to wishlist!`, { theme: 'dark' });
+    }
   };
 
   // Related Products Scrolling
@@ -76,7 +86,7 @@ export default function ProductDetailsPage() {
     <div className="container mx-auto px-6 py-16">
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Product Image */}
-        <div className="w-full lg:w-1/2">
+        <div className="w-full lg:w-1/2 relative">
           <Image
             src={product.image}
             alt={product.name}
@@ -84,6 +94,17 @@ export default function ProductDetailsPage() {
             height={500}
             className="w-full h-auto rounded-lg shadow-md"
           />
+          {/* Heart Icon */}
+          <button
+            onClick={() => handleToggleWishlist(product)}
+            className="absolute top-4 right-4 bg-white p-3 rounded-full shadow-lg hover:bg-teal hover:text-white transition"
+          >
+            {wishlist.some((item) => item.id === product.id) ? (
+              <AiFillHeart className="text-teal" size={24} />
+            ) : (
+              <AiOutlineHeart className="text-gray-400" size={24} />
+            )}
+          </button>
         </div>
 
         {/* Product Info */}
@@ -123,7 +144,7 @@ export default function ProductDetailsPage() {
             {relatedProducts.map((related) => (
               <div
                 key={related.id}
-                className="min-w-[250px] w-[250px] flex-shrink-0 bg-darkBlack text-lightGray rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300"
+                className="min-w-[250px] w-[250px] flex-shrink-0 bg-darkBlack text-lightGray rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 relative"
               >
                 <Image
                   src={related.image}
@@ -132,6 +153,16 @@ export default function ProductDetailsPage() {
                   height={150}
                   className="w-full h-40 object-cover"
                 />
+                <button
+                  onClick={() => handleToggleWishlist(related)}
+                  className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md z-10 hover:bg-teal hover:text-white transition"
+                >
+                  {wishlist.some((item) => item.id === related.id) ? (
+                    <AiFillHeart className="text-teal" size={20} />
+                  ) : (
+                    <AiOutlineHeart className="text-gray-400" size={20} />
+                  )}
+                </button>
                 <div className="p-4 text-center">
                   <h3 className="text-lg font-bold">{related.name}</h3>
                   <p className="text-teal font-bold mt-2">${related.price.toFixed(2)}</p>

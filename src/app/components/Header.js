@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { AiOutlineMenu, AiOutlineShoppingCart, AiOutlineSearch, AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineMenu, AiOutlineShoppingCart, AiOutlineSearch, AiOutlineUser, AiOutlineHeart } from 'react-icons/ai';
 import MobileOverlay from './MobileOverlay';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
@@ -27,7 +27,7 @@ export default function Header() {
           <div className="text-teal text-2xl font-bold">
             <Link href="/">Jake&apos;s Shop</Link>
           </div>
-          {/* Cart, User, and Hamburger Menu (Mobile/Tablet) */}
+          {/* Cart, Wishlist, User, and Hamburger Menu (Mobile/Tablet) */}
           <div className="flex items-center space-x-4 lg:hidden">
             <Link href="/cart" className="relative hover:text-teal transition">
               <AiOutlineShoppingCart size={24} />
@@ -36,6 +36,9 @@ export default function Header() {
                   {totalQuantity}
                 </span>
               )}
+            </Link>
+            <Link href="/wishlist" className="hover:text-teal transition">
+              <AiOutlineHeart size={24} />
             </Link>
             <Link href={isAuthenticated ? '/profile' : '/auth/login'} className="hover:text-teal transition">
               <AiOutlineUser size={24} />
@@ -85,7 +88,7 @@ export default function Header() {
             />
             <AiOutlineSearch className="text-teal" size={20} />
           </div>
-          {/* Cart and Profile Icons (Desktop) */}
+          {/* Cart, Wishlist, and Profile Icons (Desktop) */}
           <div className="hidden lg:flex items-center space-x-4 lg:ml-4">
             <Link href="/cart" className="relative hover:text-teal transition">
               <AiOutlineShoppingCart size={24} />
@@ -94,6 +97,9 @@ export default function Header() {
                   {totalQuantity}
                 </span>
               )}
+            </Link>
+            <Link href="/wishlist" className="hover:text-teal transition">
+              <AiOutlineHeart size={24} />
             </Link>
             <Link href={isAuthenticated ? '/profile' : '/auth/login'} className="hover:text-teal transition">
               <AiOutlineUser size={24} />
