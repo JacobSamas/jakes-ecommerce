@@ -1,23 +1,45 @@
-'use client';
+"use client";
 
-import { useParams } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { addItem } from '../../redux/slices/cartSlice';
-import { useEffect, useState, useRef } from 'react';
-import { products } from '../../dummydata/dummyData';
-import Image from 'next/image';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { AiOutlineLeft, AiOutlineRight, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { useParams } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../redux/slices/cartSlice";
+import { useEffect, useState, useRef } from "react";
+import { products } from "../../dummydata/dummyData";
+import Image from "next/image";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  AiOutlineLeft,
+  AiOutlineRight,
+  AiOutlineHeart,
+  AiFillHeart,
+} from "react-icons/ai";
+import ProductReviews from "@/app/components/ProductReviews";
 
 export default function ProductDetailsPage() {
-  const { id } = useParams(); // Get dynamic route parameter
+  const { id } = useParams();
   const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
-  const [wishlist, setWishlist] = useState([]); // Wishlist state
+  const [wishlist, setWishlist] = useState([]);
   const scrollRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(false);
+  const [reviews, setReviews] = useState([
+    {
+      id: 1,
+      name: "Jane Doe",
+      rating: 5,
+      comment: "Amazing product! Worth every penny.",
+      media: [],
+    },
+    {
+      id: 2,
+      name: "John Smith",
+      rating: 4,
+      comment: "Very good quality and quick delivery.",
+      media: [],
+    },
+  ]);
 
   useEffect(() => {
     const selectedProduct = products.find((item) => item.id.toString() === id);
@@ -27,24 +49,24 @@ export default function ProductDetailsPage() {
   const handleAddToCart = (product) => {
     dispatch(addItem(product));
     toast.success(`${product.name} added to cart!`, {
-      position: 'top-right',
+      position: "top-right",
       autoClose: 3000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: 'dark',
+      theme: "dark",
     });
   };
 
   const handleToggleWishlist = (product) => {
     if (wishlist.some((item) => item.id === product.id)) {
       setWishlist(wishlist.filter((item) => item.id !== product.id));
-      toast.info(`${product.name} removed from wishlist.`, { theme: 'dark' });
+      toast.info(`${product.name} removed from wishlist.`, { theme: "dark" });
     } else {
       setWishlist([...wishlist, product]);
-      toast.success(`${product.name} added to wishlist!`, { theme: 'dark' });
+      toast.success(`${product.name} added to wishlist!`, { theme: "dark" });
     }
   };
 
@@ -53,7 +75,9 @@ export default function ProductDetailsPage() {
     const { current } = scrollRef;
     if (current) {
       setShowLeftArrow(current.scrollLeft > 0);
-      setShowRightArrow(current.scrollLeft < current.scrollWidth - current.clientWidth);
+      setShowRightArrow(
+        current.scrollLeft < current.scrollWidth - current.clientWidth
+      );
     }
   };
 
@@ -61,8 +85,8 @@ export default function ProductDetailsPage() {
     const { current } = scrollRef;
     if (current) {
       checkScroll();
-      current.addEventListener('scroll', checkScroll);
-      return () => current.removeEventListener('scroll', checkScroll);
+      current.addEventListener("scroll", checkScroll);
+      return () => current.removeEventListener("scroll", checkScroll);
     }
   }, []);
 
@@ -70,17 +94,23 @@ export default function ProductDetailsPage() {
     const { current } = scrollRef;
     if (current) {
       current.scrollBy({
-        left: direction === 'left' ? -300 : 300,
-        behavior: 'smooth',
+        left: direction === "left" ? -300 : 300,
+        behavior: "smooth",
       });
     }
   };
 
   if (!product) {
-    return <p className="text-lightGray text-center mt-16">Loading product details...</p>;
+    return (
+      <p className="text-lightGray text-center mt-16">
+        Loading product details...
+      </p>
+    );
   }
 
-  const relatedProducts = products.filter((item) => item.id !== product.id).slice(0, 4);
+  const relatedProducts = products
+    .filter((item) => item.id !== product.id)
+    .slice(0, 4);
 
   return (
     <div className="container mx-auto px-6 py-16">
@@ -109,8 +139,12 @@ export default function ProductDetailsPage() {
 
         {/* Product Info */}
         <div className="w-full lg:w-1/2 flex flex-col">
-          <h1 className="text-3xl font-bold text-lightGray mb-4">{product.name}</h1>
-          <p className="text-teal text-xl font-bold mb-4">${product.price.toFixed(2)}</p>
+          <h1 className="text-3xl font-bold text-lightGray mb-4">
+            {product.name}
+          </h1>
+          <p className="text-teal text-xl font-bold mb-4">
+            ${product.price.toFixed(2)}
+          </p>
           <p className="text-lightGray mb-8">{product.description}</p>
 
           <button
@@ -124,12 +158,14 @@ export default function ProductDetailsPage() {
 
       {/* Related Products Section */}
       <div className="mt-16">
-        <h2 className="text-2xl font-bold text-lightGray mb-8">Related Products</h2>
+        <h2 className="text-2xl font-bold text-lightGray mb-8">
+          Related Products
+        </h2>
         <div className="relative">
           {/* Left Arrow */}
           {showLeftArrow && (
             <button
-              onClick={() => scroll('left')}
+              onClick={() => scroll("left")}
               className="absolute left-0 top-1/2 bg-darkBlack text-teal p-3 rounded-full shadow-lg hover:bg-teal hover:text-darkBlack transition z-10 hidden md:block"
             >
               <AiOutlineLeft size={24} />
@@ -165,7 +201,9 @@ export default function ProductDetailsPage() {
                 </button>
                 <div className="p-4 text-center">
                   <h3 className="text-lg font-bold">{related.name}</h3>
-                  <p className="text-teal font-bold mt-2">${related.price.toFixed(2)}</p>
+                  <p className="text-teal font-bold mt-2">
+                    ${related.price.toFixed(2)}
+                  </p>
                   <button
                     className="mt-4 px-4 py-2 bg-teal text-white font-bold rounded-md hover:bg-green transition"
                     onClick={() => handleAddToCart(related)}
@@ -180,14 +218,17 @@ export default function ProductDetailsPage() {
           {/* Right Arrow */}
           {showRightArrow && (
             <button
-              onClick={() => scroll('right')}
+              onClick={() => scroll("right")}
               className="absolute right-0 top-1/2 bg-darkBlack text-teal p-3 rounded-full shadow-lg hover:bg-teal hover:text-darkBlack transition z-10 hidden md:block"
             >
               <AiOutlineRight size={24} />
             </button>
           )}
         </div>
+        {/* Reviews Section */}
+        <ProductReviews reviews={reviews} setReviews={setReviews} />
       </div>
     </div>
+    
   );
 }
