@@ -3,19 +3,15 @@ const pool = require('../config/db');
 // Get all reviews for a product
 const getProductReviews = async (req, res) => {
     try {
-        console.log("Fetching reviews for product:", req.params.productId);  // Debug log
         const [reviews] = await pool.query(
             'SELECT r.*, u.name as user_name FROM reviews r JOIN users u ON r.user_id = u.id WHERE product_id = ? ORDER BY r.created_at DESC',
             [req.params.productId]
         );
-        console.log("Reviews Fetched:", reviews);  // Log reviews
         res.json(reviews);
     } catch (err) {
-        console.error("Error Fetching Reviews:", err);  // Log errors
         res.status(500).json({ message: err.message });
     }
 };
-
 
 // Add a new review
 const addReview = async (req, res) => {
